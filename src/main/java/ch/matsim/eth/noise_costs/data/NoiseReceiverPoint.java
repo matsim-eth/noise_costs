@@ -51,8 +51,16 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 	// time-specific information
 	private double finalImmission = 0.;
 	private double affectedAgentUnits = 0.;
-	private double damageCosts;
-	private double damageCostsPerAffectedAgentUnit;
+	private double affectedHomeFacilityUnits = 0.;
+
+    private double rentDamageCosts;
+    private double rentCostsPerAffectedHomeFacilityUnit;
+
+    private double healthDamageCosts;
+    private double healthCostsPerAffectedAgentUnit;
+
+    private double totalDamageCosts;
+
 
 	public Map<Id<Person>, List<PersonActivityInfo>> getPersonId2actInfos() {
 		if(personId2actInfos == null) {
@@ -109,21 +117,21 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 		this.finalImmission = finalImmission;
 	}
 
-	public double getDamageCosts() {
-		return damageCosts;
+    public double getHealthDamageCosts() {
+        return healthDamageCosts;
+    }
+
+    public void setHealthDamageCosts(double healthDamageCosts) {
+        this.healthDamageCosts = healthDamageCosts;
+    }
+
+    public double getHealthCostsPerAffectedAgentUnit() {
+		return healthCostsPerAffectedAgentUnit;
 	}
 
-	public void setDamageCosts(double damageCosts) {
-		this.damageCosts = damageCosts;
-	}
-
-	public double getDamageCostsPerAffectedAgentUnit() {
-		return damageCostsPerAffectedAgentUnit;
-	}
-
-	public void setDamageCostsPerAffectedAgentUnit(
-			double damageCostsPerAffectedAgentUnit) {
-		this.damageCostsPerAffectedAgentUnit = damageCostsPerAffectedAgentUnit;
+	public void setHealthCostsPerAffectedAgentUnit(
+			double healthCostsPerAffectedAgentUnit) {
+		this.healthCostsPerAffectedAgentUnit = healthCostsPerAffectedAgentUnit;
 	}
 
 	public double getAffectedAgentUnits() {
@@ -133,6 +141,38 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 	public void setAffectedAgentUnits(double affectedAgentsUnits) {
 		this.affectedAgentUnits = affectedAgentsUnits;
 	}
+
+    public double getRentDamageCosts() {
+        return rentDamageCosts;
+    }
+
+    public void setRentDamageCosts(double rentDamageCosts) {
+        this.rentDamageCosts = rentDamageCosts;
+    }
+
+    public double getRentCostsPerAffectedHomeFacilityUnit() {
+        return rentCostsPerAffectedHomeFacilityUnit;
+    }
+
+    public void setRentCostsPerAffectedHomeFacilityUnit(double rentCostsPerAffectedHomeFacilityUnit) {
+        this.rentCostsPerAffectedHomeFacilityUnit = rentCostsPerAffectedHomeFacilityUnit;
+    }
+
+    public double getAffectedHomeFacilityUnits() {
+        return affectedHomeFacilityUnits;
+    }
+
+    public void setAffectedHomeFacilityUnits(double affectedHomeFacilityUnits) {
+        this.affectedHomeFacilityUnits = affectedHomeFacilityUnits;
+    }
+
+    public double getTotalDamageCosts() {
+        return totalDamageCosts;
+    }
+
+    public void setTotalDamageCosts(double totalDamageCosts) {
+        this.totalDamageCosts = totalDamageCosts;
+    }
 
 	@Override
 	public String toString() {
@@ -144,8 +184,13 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 //				+ ", linkId2IsolatedImmissionPlusOneHGV=" + linkId2IsolatedImmissionPlusOneHGV 
 				+ ", finalImmission=" + finalImmission 
 				+ ", affectedAgentUnits=" + affectedAgentUnits
-				+ ", damageCosts=" + damageCosts 
-				+ ", damageCostsPerAffectedAgentUnit=" + damageCostsPerAffectedAgentUnit + "]";
+                + ", affectedHomeFacilityUnits=" + affectedHomeFacilityUnits
+                + ", rentDamageCosts=" + rentDamageCosts
+                + ", rentCostsPerAffectedHomeFacilityUnit=" + rentCostsPerAffectedHomeFacilityUnit
+                + ", healthDamageCosts=" + healthDamageCosts
+                + ", healthCostsPerAffectedAgentUnit=" + healthCostsPerAffectedAgentUnit
+				+ ", totalDamageCosts=" + totalDamageCosts
+                + "]";
 	}
 
 	public void reset() {
@@ -157,7 +202,9 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 //		linkId2IsolatedImmission.clear();
 		this.setFinalImmission(0.);
 		this.setAffectedAgentUnits(0.);
-		this.setDamageCosts(0.);
-		this.setDamageCostsPerAffectedAgentUnit(0.);
+		this.setHealthDamageCosts(0.);
+		this.setRentDamageCosts(0.);
+		this.setHealthCostsPerAffectedAgentUnit(0.);
+		this.setRentCostsPerAffectedHomeFacilityUnit(0.);
 	}
 }

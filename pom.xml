@@ -59,7 +59,12 @@
         <dependency>
             <groupId>org.matsim</groupId>
             <artifactId>matsim</artifactId>
-            <version>0.10.1</version>
+            <version>${matsim.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>analysis</artifactId>
+            <version>${matsim.version}</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>ch.ethz.matsim</groupId>-->

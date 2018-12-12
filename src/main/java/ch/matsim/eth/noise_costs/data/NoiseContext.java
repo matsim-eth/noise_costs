@@ -28,13 +28,16 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import ch.matsim.eth.noise_costs.NoiseConfigGroup;
 import ch.matsim.eth.noise_costs.handler.NoiseEquations;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.network.NetworkUtils;
+import org.matsim.core.utils.collections.QuadTree;
 import org.matsim.core.utils.collections.Tuple;
 import org.matsim.core.utils.misc.Counter;
+import org.matsim.facilities.ActivityFacility;
 import org.matsim.vehicles.Vehicle;
 
 import java.util.*;
@@ -53,6 +56,7 @@ public class NoiseContext {
 	private final Scenario scenario;
 	private final NoiseConfigGroup noiseParams;
 	private final Grid grid;
+	private QuadTree<Id<ActivityFacility>> quadTree;
 			
 	private final Map<Tuple<Integer,Integer>, List<Id<Link>>> zoneTuple2listOfLinkIds = new HashMap<Tuple<Integer, Integer>, List<Id<Link>>>();
 	private double xCoordMinLinkNode = Double.MAX_VALUE;
@@ -93,6 +97,19 @@ public class NoiseContext {
 //		this.noiseParams.checkNoiseParametersForConsistency();
 		
 		this.grid = new Grid(scenario);
+
+//		// setup quadtree for home facilities
+//		this.quadTree = new QuadTree<>(this.grid.getGridParams().getReceiverPointsGridMinX(),
+//				this.grid.getGridParams().getReceiverPointsGridMinY(),
+//				this.grid.getGridParams().getReceiverPointsGridMaxX(),
+//				this.grid.getGridParams().getReceiverPointsGridMaxY());
+//
+//		for (ActivityFacility facility : this.scenario.getActivityFacilities().getFacilities().values()) {
+//			if (facility.getActivityOptions().values().contains("home")) {
+//				Coord coord = facility.getCoord();
+//				this.quadTree.put(coord.getX(), coord.getY(), facility.getId());
+//			}
+//		}
 				
 		this.currentTimeBinEndTime = noiseParams.getTimeBinSizeNoiseComputation();
 		

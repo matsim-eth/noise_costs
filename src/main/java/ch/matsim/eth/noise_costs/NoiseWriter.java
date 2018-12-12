@@ -325,7 +325,7 @@ public class NoiseWriter {
 			
 			for (NoiseReceiverPoint rp : noiseContext.getReceiverPoints().values()) {
 				
-				bw.write(rp.getId() + ";" + rp.getDamageCosts());
+				bw.write(rp.getId() + ";" + rp.getTotalDamageCosts());
 				bw.newLine();
 			}
 			
