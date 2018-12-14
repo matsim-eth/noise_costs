@@ -28,7 +28,6 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import ch.matsim.eth.noise_costs.NoiseConfigGroup;
 import ch.matsim.eth.noise_costs.handler.NoiseEquations;
@@ -98,19 +97,6 @@ public class NoiseContext {
 		
 		this.grid = new Grid(scenario);
 
-//		// setup quadtree for home facilities
-//		this.quadTree = new QuadTree<>(this.grid.getGridParams().getReceiverPointsGridMinX(),
-//				this.grid.getGridParams().getReceiverPointsGridMinY(),
-//				this.grid.getGridParams().getReceiverPointsGridMaxX(),
-//				this.grid.getGridParams().getReceiverPointsGridMaxY());
-//
-//		for (ActivityFacility facility : this.scenario.getActivityFacilities().getFacilities().values()) {
-//			if (facility.getActivityOptions().values().contains("home")) {
-//				Coord coord = facility.getCoord();
-//				this.quadTree.put(coord.getX(), coord.getY(), facility.getId());
-//			}
-//		}
-				
 		this.currentTimeBinEndTime = noiseParams.getTimeBinSizeNoiseComputation();
 		
 		this.noiseReceiverPoints = new HashMap<Id<ReceiverPoint>, NoiseReceiverPoint>();
@@ -223,8 +209,13 @@ public class NoiseContext {
 					}
 				}
 			}
-			
+
+			nrp.setAffectedFacilityUnits(0.);
+			if (this.grid.getReceiverPointId2numberActivityFacilities().containsKey(nrp.getId())) {
+				nrp.setAffectedFacilityUnits(this.grid.getReceiverPointId2numberActivityFacilities().get(nrp.getId()));
+			}
 			this.noiseReceiverPoints.put(nrp.getId(), nrp);
+
 			cnt.incCounter();
 		}
 		cnt.printCounter();

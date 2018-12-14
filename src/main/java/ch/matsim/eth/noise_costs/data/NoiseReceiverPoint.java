@@ -51,12 +51,12 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 	// time-specific information
 	private double finalImmission = 0.;
 	private double affectedAgentUnits = 0.;
-	private double affectedHomeFacilityUnits = 0.;
+	private double affectedFacilityUnits = 0.;
 
-    private double rentDamageCosts;
+    private double rentCosts;
     private double rentCostsPerAffectedHomeFacilityUnit;
 
-    private double healthDamageCosts;
+    private double healthCosts;
     private double healthCostsPerAffectedAgentUnit;
 
     private double totalDamageCosts;
@@ -117,12 +117,12 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 		this.finalImmission = finalImmission;
 	}
 
-    public double getHealthDamageCosts() {
-        return healthDamageCosts;
+    public double getHealthCosts() {
+        return healthCosts;
     }
 
-    public void setHealthDamageCosts(double healthDamageCosts) {
-        this.healthDamageCosts = healthDamageCosts;
+    public void setHealthCosts(double healthCosts) {
+        this.healthCosts = healthCosts;
     }
 
     public double getHealthCostsPerAffectedAgentUnit() {
@@ -142,12 +142,12 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 		this.affectedAgentUnits = affectedAgentsUnits;
 	}
 
-    public double getRentDamageCosts() {
-        return rentDamageCosts;
+    public double getRentCosts() {
+        return rentCosts;
     }
 
-    public void setRentDamageCosts(double rentDamageCosts) {
-        this.rentDamageCosts = rentDamageCosts;
+    public void setRentCosts(double rentCosts) {
+        this.rentCosts = rentCosts;
     }
 
     public double getRentCostsPerAffectedHomeFacilityUnit() {
@@ -158,12 +158,12 @@ public class NoiseReceiverPoint extends ReceiverPoint {
         this.rentCostsPerAffectedHomeFacilityUnit = rentCostsPerAffectedHomeFacilityUnit;
     }
 
-    public double getAffectedHomeFacilityUnits() {
-        return affectedHomeFacilityUnits;
+    public double getAffectedFacilityUnits() {
+        return affectedFacilityUnits;
     }
 
-    public void setAffectedHomeFacilityUnits(double affectedHomeFacilityUnits) {
-        this.affectedHomeFacilityUnits = affectedHomeFacilityUnits;
+    public void setAffectedFacilityUnits(double affectedFacilityUnits) {
+        this.affectedFacilityUnits = affectedFacilityUnits;
     }
 
     public double getTotalDamageCosts() {
@@ -184,10 +184,10 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 //				+ ", linkId2IsolatedImmissionPlusOneHGV=" + linkId2IsolatedImmissionPlusOneHGV 
 				+ ", finalImmission=" + finalImmission 
 				+ ", affectedAgentUnits=" + affectedAgentUnits
-                + ", affectedHomeFacilityUnits=" + affectedHomeFacilityUnits
-                + ", rentDamageCosts=" + rentDamageCosts
+                + ", affectedFacilityUnits=" + affectedFacilityUnits
+                + ", rentCosts=" + rentCosts
                 + ", rentCostsPerAffectedHomeFacilityUnit=" + rentCostsPerAffectedHomeFacilityUnit
-                + ", healthDamageCosts=" + healthDamageCosts
+                + ", healthCosts=" + healthCosts
                 + ", healthCostsPerAffectedAgentUnit=" + healthCostsPerAffectedAgentUnit
 				+ ", totalDamageCosts=" + totalDamageCosts
                 + "]";
@@ -202,8 +202,8 @@ public class NoiseReceiverPoint extends ReceiverPoint {
 //		linkId2IsolatedImmission.clear();
 		this.setFinalImmission(0.);
 		this.setAffectedAgentUnits(0.);
-		this.setHealthDamageCosts(0.);
-		this.setRentDamageCosts(0.);
+		this.setHealthCosts(0.);
+		this.setRentCosts(0.);
 		this.setHealthCostsPerAffectedAgentUnit(0.);
 		this.setRentCostsPerAffectedHomeFacilityUnit(0.);
 	}

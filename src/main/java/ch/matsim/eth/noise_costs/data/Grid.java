@@ -72,6 +72,7 @@ public class Grid {
 	private double yCoordMax = Double.MIN_VALUE;
 	
 	private final Map<Coord, Id<ReceiverPoint>> activityCoord2receiverPointId = new HashMap<Coord, Id<ReceiverPoint>>();
+	private final Map<Id<ReceiverPoint>, Integer> receiverPointId2numberActivityFacilities = new HashMap<>();
 	private Map<Id<ReceiverPoint>, ReceiverPoint> receiverPoints;
 	
 	public Grid(Scenario scenario) {
@@ -253,6 +254,9 @@ public class Grid {
 				if(activityCoord2receiverPointId.put(coord, rp.getId()) != null){
 					log.warn("this must not happen");
 				}
+				receiverPointId2numberActivityFacilities.putIfAbsent(rp.getId(), 0);
+				int previousNumberFacilities = receiverPointId2numberActivityFacilities.get(rp.getId());
+				receiverPointId2numberActivityFacilities.put(rp.getId(), previousNumberFacilities + 1);
 			}
 			
 			counter.incCounter();
@@ -325,7 +329,11 @@ public class Grid {
 	public Map<Coord, Id<ReceiverPoint>> getActivityCoord2receiverPointId() {
 		return activityCoord2receiverPointId;
 	}
-	
+
+	public Map<Id<ReceiverPoint>, Integer> getReceiverPointId2numberActivityFacilities() {
+		return receiverPointId2numberActivityFacilities;
+	}
+
 	Map<Id<ReceiverPoint>, ReceiverPoint> getAndClearReceiverPoints() {
 		Map<Id<ReceiverPoint>, ReceiverPoint> receiverPoints = this.receiverPoints;
 		this.receiverPoints = null;
