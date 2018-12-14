@@ -64,6 +64,9 @@ public class NoiseTimeTracker implements PersonEntersVehicleEventHandler, LinkEn
 	@Inject
 	private EventsManager events;
 
+	@Inject
+	private NoiseCostCalculator noiseCostCalculator;
+
 	private String outputDirectory;
 	private int iteration;
 	
@@ -375,15 +378,15 @@ public class NoiseTimeTracker implements PersonEntersVehicleEventHandler, LinkEn
 		double affectedAgentUnits = rp.getAffectedAgentUnits();
 
 		// rent costs
-		double rentCosts = NoiseEquations.calculateRentCosts(noiseImmission, rp.getAffectedFacilityUnits(), currentTimeBinEndTime, timeBinsSize);
-		double rentCostsPerAffectedHomeFacilityUnit = NoiseEquations.calculateRentCosts(noiseImmission, 1., currentTimeBinEndTime, timeBinsSize);
+		double rentCosts = noiseCostCalculator.calculateRentCosts(noiseImmission, rp.getAffectedFacilityUnits(), currentTimeBinEndTime, timeBinsSize);
+		double rentCostsPerAffectedHomeFacilityUnit = noiseCostCalculator.calculateRentCosts(noiseImmission, 1., currentTimeBinEndTime, timeBinsSize);
 
 		rp.setRentCosts(rentCosts);
 		rp.setRentCostsPerAffectedHomeFacilityUnit(rentCostsPerAffectedHomeFacilityUnit);
 
 		// health costs
-		double healthCosts = NoiseEquations.calculateHealthCosts(noiseImmission, affectedAgentUnits, currentTimeBinEndTime, timeBinsSize);
-		double healthCostsPerAffectedAgentUnit = NoiseEquations.calculateHealthCosts(noiseImmission, 1., currentTimeBinEndTime, timeBinsSize);
+		double healthCosts = noiseCostCalculator.calculateHealthCosts(noiseImmission, affectedAgentUnits, currentTimeBinEndTime, timeBinsSize);
+		double healthCostsPerAffectedAgentUnit = noiseCostCalculator.calculateHealthCosts(noiseImmission, 1., currentTimeBinEndTime, timeBinsSize);
 
 		rp.setHealthCosts(healthCosts);
 		rp.setHealthCostsPerAffectedAgentUnit(healthCostsPerAffectedAgentUnit);
@@ -573,8 +576,8 @@ public class NoiseTimeTracker implements PersonEntersVehicleEventHandler, LinkEn
 					double noiseImmissionPlusOneCarThisLink = NoiseEquations.calculateResultingNoiseImmissionPlusOneVehicle(rp.getFinalImmission(), immision.getLinkId2IsolatedImmission().get(thisLink), immision.getLinkId2IsolatedImmissionPlusOneCar().get(thisLink));
 					double noiseImmissionPlusOneHGVThisLink = NoiseEquations.calculateResultingNoiseImmissionPlusOneVehicle(rp.getFinalImmission(), immision.getLinkId2IsolatedImmission().get(thisLink), immision.getLinkId2IsolatedImmissionPlusOneHGV().get(thisLink));
 
-					double healthCostsPlusOneCarThisLink = NoiseEquations.calculateHealthCosts(noiseImmissionPlusOneCarThisLink, rp.getAffectedAgentUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
-					double rentCostsPlusOneCarThisLink = NoiseEquations.calculateRentCosts(noiseImmissionPlusOneCarThisLink, rp.getAffectedFacilityUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
+					double healthCostsPlusOneCarThisLink = noiseCostCalculator.calculateHealthCosts(noiseImmissionPlusOneCarThisLink, rp.getAffectedAgentUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
+					double rentCostsPlusOneCarThisLink = noiseCostCalculator.calculateRentCosts(noiseImmissionPlusOneCarThisLink, rp.getAffectedFacilityUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
 					double damageCostsPlusOneCarThisLink = rentCostsPlusOneCarThisLink + healthCostsPlusOneCarThisLink;
 					double marginalDamageCostCarThisLink = (damageCostsPlusOneCarThisLink - rp.getTotalDamageCosts()) / this.noiseContext.getNoiseParams().getScaleFactor();
 					
@@ -594,8 +597,8 @@ public class NoiseTimeTracker implements PersonEntersVehicleEventHandler, LinkEn
 						}
 					}
 
-					double healthCostsPlusOneHGVThisLink = NoiseEquations.calculateHealthCosts(noiseImmissionPlusOneHGVThisLink, rp.getAffectedAgentUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
-					double rentCostsPlusOneHGVThisLink = NoiseEquations.calculateRentCosts(noiseImmissionPlusOneHGVThisLink, rp.getAffectedFacilityUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
+					double healthCostsPlusOneHGVThisLink = noiseCostCalculator.calculateHealthCosts(noiseImmissionPlusOneHGVThisLink, rp.getAffectedAgentUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
+					double rentCostsPlusOneHGVThisLink = noiseCostCalculator.calculateRentCosts(noiseImmissionPlusOneHGVThisLink, rp.getAffectedFacilityUnits(), this.noiseContext.getCurrentTimeBinEndTime(), this.noiseContext.getNoiseParams().getTimeBinSizeNoiseComputation());
 					double damageCostsPlusOneHGVThisLink = rentCostsPlusOneHGVThisLink + healthCostsPlusOneHGVThisLink;
 					double marginalDamageCostHGVThisLink = (damageCostsPlusOneHGVThisLink - rp.getTotalDamageCosts()) / this.noiseContext.getNoiseParams().getScaleFactor();
 					
@@ -965,5 +968,8 @@ public class NoiseTimeTracker implements PersonEntersVehicleEventHandler, LinkEn
 	public void setOutputFilePath(String outputFilePath) {
 		this.outputDirectory = outputFilePath;
 	}
-	
+
+	public void setNoiseCostCalculator(NoiseCostCalculator noiseCostCalculator) {
+		this.noiseCostCalculator = noiseCostCalculator;
+	}
 }

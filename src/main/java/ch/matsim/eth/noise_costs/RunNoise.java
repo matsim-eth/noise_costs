@@ -2,6 +2,7 @@ package ch.matsim.eth.noise_costs;
 
 import ch.matsim.eth.noise_costs.data.NoiseContext;
 import ch.matsim.eth.noise_costs.handler.LinkSpeedCalculation;
+import ch.matsim.eth.noise_costs.handler.NoiseCostCalculator;
 import ch.matsim.eth.noise_costs.handler.NoiseTimeTracker;
 import ch.matsim.eth.noise_costs.handler.PersonActivityTracker;
 import org.apache.log4j.Logger;
@@ -29,13 +30,13 @@ public class RunNoise {
     private NoiseTimeTracker timeTracker = null;
 
     public static void main(String[] args) {
-//        String config = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/config_default.xml";
-//        String events = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/10.events.xml.gz";
-//        String outputFilePath = "/home/ctchervenkov/Documents/projects/road_pricing/noise_output/";
+        String config = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/config_default.xml";
+        String events = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/10.events.xml.gz";
+        String outputFilePath = "/home/ctchervenkov/Documents/projects/road_pricing/noise_output/";
 
-        String config = args[0];
-        String events = args[1];
-        String outputFilePath = args[2];
+//        String config = args[0];
+//        String events = args[1];
+//        String outputFilePath = args[2];
         new RunNoise(config, events, outputFilePath).run();
     }
 
@@ -65,10 +66,15 @@ public class RunNoise {
 
         EventsManager eventsManager = EventsUtils.createEventsManager();
 
+        NoiseCostCalculator noiseCostCalculator = new NoiseCostCalculator(103.62, 54.0,
+                18.74, 56.0,
+                21.45, 64.0);
+
         timeTracker = new NoiseTimeTracker();
         timeTracker.setNoiseContext(noiseContext);
         timeTracker.setEvents(eventsManager);
         timeTracker.setOutputFilePath(outputFilePath);
+        timeTracker.setNoiseCostCalculator(noiseCostCalculator);
 
         eventsManager.addHandler(timeTracker);
 
