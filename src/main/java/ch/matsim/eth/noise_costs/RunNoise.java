@@ -5,6 +5,8 @@ import ch.matsim.eth.noise_costs.handler.LinkSpeedCalculation;
 import ch.matsim.eth.noise_costs.handler.NoiseCostCalculator;
 import ch.matsim.eth.noise_costs.handler.NoiseTimeTracker;
 import ch.matsim.eth.noise_costs.handler.PersonActivityTracker;
+import ch.matsim.eth.noise_costs.utils.MergeNoiseCSVFile;
+import ch.matsim.eth.noise_costs.utils.ProcessNoiseImmissions;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -106,6 +108,35 @@ public class RunNoise {
             eventWriter.closeFile();
         }
         log.info("Noise calculation completed.");
+
+
+        // some processing of the output data
+        if (!outputFilePath.endsWith("/")) outputFilePath = outputFilePath + "/";
+        ProcessNoiseImmissions process = new ProcessNoiseImmissions(outputFilePath + "immissions/", outputFilePath + "receiverPoints/receiverPoints.csv", noiseParameters.getReceiverPointGap());
+        process.run();
+
+        final String[] labels = {
+                "immission",
+                "consideredAgentUnits" ,
+                "damages_receiverPoint",
+                "average_damages_link_car" ,
+                "marginal_damages_link_car"
+        };
+        final String[] workingDirectories = {
+                outputFilePath + "/immissions/" ,
+                outputFilePath + "/consideredAgentUnits/" ,
+                outputFilePath + "/damages_receiverPoint/",
+                outputFilePath + "/average_damages_link_car/",
+                outputFilePath + "/marginal_damages_link_car/"
+        };
+
+        MergeNoiseCSVFile merger = new MergeNoiseCSVFile() ;
+        merger.setReceiverPointsFile(outputFilePath + "receiverPoints/receiverPoints.csv");
+        merger.setOutputDirectory(outputFilePath);
+        merger.setTimeBinSize(noiseParameters.getTimeBinSizeNoiseComputation());
+        merger.setWorkingDirectory(workingDirectories);
+        merger.setLabel(labels);
+        merger.run();
 
     }
 }

@@ -309,11 +309,15 @@ public final class MergeNoiseCSVFile {
 						String lineToWrite = rp.toString() + ";" + rp2Coord.get(rp).getX() + ";" + rp2Coord.get(rp).getY() + ";" + String.valueOf(time);
 
 						for (String label : this.label2time2rp2value.keySet()) {
-							double value = this.label2time2rp2value.get(label).get(time).get(rp.toString());
-							if (value > this.threshold) {
-								writeThisLine = true;
+							if (this.label2time2rp2value.get(label).containsKey(time)) {
+								if (this.label2time2rp2value.get(label).get(time).containsKey(rp.toString())) {
+									double value = this.label2time2rp2value.get(label).get(time).get(rp.toString());
+									if (value > this.threshold) {
+										writeThisLine = true;
+									}
+									lineToWrite = lineToWrite + ";" + value;
+								}
 							}
-							lineToWrite = lineToWrite + ";" + value;
 						}
 
 						// only write the line if at least one value is larger than threshold
