@@ -22,6 +22,7 @@
  */
 package ch.matsim.eth.noise_costs.utils;
 
+import ch.matsim.eth.noise_costs.readers.CSVReceiverPointReader;
 import com.vividsolutions.jts.geom.Envelope;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
@@ -122,46 +123,8 @@ public class ProcessNoiseImmissions {
 					time2rp2value.put(time, rp2value);
 				}
 			}
-			
-			BufferedReader br = IOUtils.getBufferedReader(this.receiverPointsFile);
-			String line = br.readLine();
-			
-			Map<Id<ReceiverPoint>, Coord> rp2Coord = new HashMap<Id<ReceiverPoint>, Coord>();
-			int lineCounter = 0;
-			
-			log.info("Reading receiver points file");
-			
-			while( (line = br.readLine()) != null){
-				
-				if (lineCounter % 10000 == 0.) {
-					log.info("# " + lineCounter);
-				}
-				
-				String[] columns = line.split(this.separator);
-				Id<ReceiverPoint> rpId = null;
-				double x = 0;
-				double y = 0;
-				
-				for(int i = 0; i < columns.length; i++){
-					
-					switch(i){
-					
-					case 0: rpId = Id.create(columns[i], ReceiverPoint.class);
-							break;
-					case 1: x = Double.valueOf(columns[i]);
-							break;
-					case 2: y = Double.valueOf(columns[i]);
-							break;
-					default: throw new RuntimeException("More than three columns. Aborting...");
-					
-					}
-					
-				}
-				
-				lineCounter++;
-				rp2Coord.put(rpId, new Coord(x, y));
-				
-			}
+
+			Map<Id<ReceiverPoint>, Coord> rp2Coord = new CSVReceiverPointReader().read(this.receiverPointsFile);
 			
 			bw = new BufferedWriter(new FileWriter(outputFile));
 			
@@ -175,6 +138,9 @@ public class ProcessNoiseImmissions {
 			bw.write(";Lden;L_6-9;L_16-19");
 
 			bw.newLine();
+
+			System.out.println("Is empty? " + time2rp2value.isEmpty());
+			System.out.println("Contains endtime? " + time2rp2value.containsKey(endTime));
 
 			// fill table
 			for (Id<ReceiverPoint> rp : time2rp2value.get(endTime).keySet()) {

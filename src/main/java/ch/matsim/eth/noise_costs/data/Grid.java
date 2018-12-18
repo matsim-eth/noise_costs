@@ -78,13 +78,13 @@ public class Grid {
 	public Grid(Scenario scenario) {
 		this.scenario = scenario;	
 
-		if ((NoiseConfigGroup) this.scenario.getConfig().getModule("noise") == null) {
+		if ((NoiseConfigGroup) this.scenario.getConfig().getModules().get("noise") == null) {
 			throw new RuntimeException("Could not find a noise config group. "
 					+ "Check if the custom module is loaded, e.g. 'ConfigUtils.loadConfig(configFile, new NoiseConfigGroup())'"
 					+ " Aborting...");
 		}
 		
-		this.noiseParams = (NoiseConfigGroup) this.scenario.getConfig().getModule("noise");
+		this.noiseParams = (NoiseConfigGroup) this.scenario.getConfig().getModules().get("noise");
 		
 		this.receiverPoints = new HashMap<Id<ReceiverPoint>, ReceiverPoint>();
 		
@@ -137,7 +137,7 @@ public class Grid {
 					
 					consideredActivityCoordsForSpatialFunctionality.add(activity.getCoord());
 				}
-				
+
 				if (this.consideredActivitiesForReceiverPointGrid.contains(activity.getType()) || consideredActivityPrefix(activity.getType(), consideredActivitiesForReceiverPointGrid)) {
 					consideredActivityCoordsForReceiverPointGrid.add(activity.getCoord());
 				}

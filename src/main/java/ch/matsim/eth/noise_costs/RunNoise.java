@@ -32,13 +32,21 @@ public class RunNoise {
     private NoiseTimeTracker timeTracker = null;
 
     public static void main(String[] args) {
-        String config = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/config_default.xml";
-        String events = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/10.events.xml.gz";
-        String outputFilePath = "/home/ctchervenkov/Documents/projects/road_pricing/noise_output/";
+//        String config = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/config_default.xml";
+//        String config = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/config_noise.xml";
+//        String events = "/home/ctchervenkov/Documents/scenarios/siouxfalls-2014/10.events.xml.gz";
+//        String outputFilePath = "/home/ctchervenkov/Documents/projects/road_pricing/noise_output/";
+//
 
-//        String config = args[0];
-//        String events = args[1];
-//        String outputFilePath = args[2];
+//        String config = "/home/ctchervenkov/Documents/projects/road_pricing/switzerland_10pct/switzerland_config_noise.xml";
+//        String events = "/home/ctchervenkov/Documents/projects/road_pricing/switzerland_10pct/20.events.xml.gz";
+//        String outputFilePath = "/home/ctchervenkov/Documents/projects/road_pricing/noise_output/";
+
+
+        String config = args[0];
+        String events = args[1];
+        String outputFilePath = args[2];
+
         new RunNoise(config, events, outputFilePath).run();
     }
 
@@ -52,6 +60,8 @@ public class RunNoise {
 
         Scenario scenario = ScenarioUtils.loadScenario(ConfigUtils.loadConfig(this.config));
         NoiseConfigGroup noiseParameters = ConfigUtils.addOrGetModule(scenario.getConfig(), NoiseConfigGroup.class) ;
+        noiseParameters.setConsideredActivitiesForReceiverPointGrid("home*,work*");
+        noiseParameters.setConsideredActivitiesForDamageCalculation("home*,work*");
 
         File file = new File(outputFilePath);
         file.mkdirs();
